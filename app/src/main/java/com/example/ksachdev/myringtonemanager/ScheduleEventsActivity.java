@@ -112,11 +112,11 @@ public class ScheduleEventsActivity extends AppCompatActivity {
         TextView startDate = (TextView) findViewById(R.id.startDate_text);
         TextView endDate = (TextView) findViewById(R.id.EndDate_text);
 
-        if(tools.isDatePassed(startDate.getText().toString()) == false){
+        if(tools.isDatePassed(startDate.getText().toString())){
             startDate.setError(DATE_IS_INVALID_MESSAGE);
             return false;
         }
-        if(tools.isDateBefore(startDate.getText().toString(),endDate.getText().toString()) == false){
+        if(tools.isDateBefore(endDate.getText().toString(),startDate.getText().toString())){
             endDate.setError(DATE_IS_INVALID_MESSAGE);
             return false;
         }

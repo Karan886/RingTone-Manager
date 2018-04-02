@@ -1,7 +1,9 @@
 package com.example.ksachdev.myringtonemanager;
 
+import android.text.TextUtils;
 import android.util.Log;
 
+import java.text.DateFormatSymbols;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -60,28 +62,29 @@ public class Tools {
         Date cDate = new Date();
         cal.setTime(cDate);
 
-        date = date + " " + cal.get(cal.HOUR) + ":" + cal.get(cal.MINUTE);
-        Date mDate = new SimpleDateFormat("MMM dd , yyyy HH:mm").parse(date,new ParsePosition(0));
+        DateFormatSymbols dateFormatSymbols = new DateFormatSymbols();
 
+        String cDate_str = dateFormatSymbols.getMonths()[cal.get(cal.MONTH)].substring(0,3)
+                + " " + getDatePrefix(cal.get(cal.DATE)) + " , " + cal.get(cal.YEAR);
 
+        Log.i(TAG,cDate_str + "," + date);
+
+        Date mDate = new SimpleDateFormat("MMM dd , yyyy").parse(date,new ParsePosition(0));
         Log.i(TAG,mDate.toString() + "," + cDate.toString());
-        if(mDate.before(cDate)){
-            return false;
+
+        if(mDate.before(cDate) && TextUtils.equals(date,cDate_str) == false){
+            return true;
         }
-        return true;
+        return false;
     }
 
     public boolean isDateBefore(String mDate,String date){
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(new Date());
 
-        mDate = mDate + " " + cal.get(cal.HOUR) + ":" + cal.get(cal.MINUTE);
-        date = date + " " + cal.get(cal.HOUR) + ":" + cal.get(cal.MINUTE);
 
         Date mParseDate = new SimpleDateFormat("MMM dd , yyyy").parse(mDate,new ParsePosition(0));
         Date parseDate = new SimpleDateFormat("MMM dd , yyyy").parse(date,new ParsePosition(0));
 
-        if(mParseDate.before(parseDate) || mParseDate.equals(parseDate)){
+        if(mParseDate.before(parseDate) && TextUtils.equals(mDate,date) == false){
             return true;
         }
         return false;

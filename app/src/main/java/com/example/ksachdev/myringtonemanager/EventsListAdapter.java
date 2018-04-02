@@ -52,7 +52,7 @@ public class EventsListAdapter extends ArrayAdapter<Event> {
         ImageView imgView = (ImageView) convertView.findViewById(R.id.list_img);
         Tools tools = new Tools();
 
-        if(tools.isDatePassed(event.getStartDate())){
+        if(tools.isDatePassed(event.getStartDate()) == false){
             imgView.setImageResource(R.drawable.circe_list_item);
         }
 

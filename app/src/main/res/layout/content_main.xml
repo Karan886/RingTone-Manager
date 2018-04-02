@@ -8,13 +8,26 @@
     tools:context="com.example.ksachdev.myringtonemanager.MainActivity"
     tools:showIn="@layout/activity_main">
 
+
+
+    <ListView
+        android:id="@+id/events_listview"
+        android:layout_width="368dp"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="34dp"
+        >
+
+    </ListView>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="No Events Are Scheduled"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:text="No Events Scheduled"
+        android:id="@+id/temp_txt"
+        android:visibility="invisible"
+        tools:layout_editor_absoluteY="247dp"
+        tools:layout_editor_absoluteX="126dp" />
+
 
 </android.support.constraint.ConstraintLayout>

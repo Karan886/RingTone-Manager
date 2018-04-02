@@ -37,28 +37,40 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:weightSum="1">
 
         <ImageButton
             android:id="@+id/startDate_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@android:drawable/ic_menu_my_calendar" />
+
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="April 1st 2018"
             android:id="@+id/startDate_text"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
             android:layout_marginTop="2dp"
-            android:layout_marginLeft="25dp"
-            android:textSize="15dp"/>
+            android:text="April 1st 2018"
+            android:textSize="15dp"
+            android:layout_weight="0.77" />
+
         <Button
-            android:layout_marginLeft="20dp"
+            android:id="@+id/StartTime_Button"
+            style="@style/Base.Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/StartTime_Button"
-            android:text="8:30 am"
-            style="@style/Base.Widget.AppCompat.Button.Borderless"/>
+            android:layout_marginLeft="18dp"
+            android:text="8:30 am" />
+
+        <CheckBox
+            android:id="@+id/notify_start_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="11dp"
+            android:text="Notify Me"
+            android:textSize="10dp" />
 
     </LinearLayout>
 
@@ -83,19 +95,28 @@
 
         <TextView
             android:id="@+id/EndDate_text"
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
             android:layout_marginTop="2dp"
-            android:text="April 1st 2018"
-            android:layout_marginLeft="25dp"/>
+            android:text="April 1st 2018" />
 
         <Button
             android:id="@+id/EndTime_Button"
             style="@style/Base.Widget.AppCompat.Button.Borderless"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="18dp"
             android:text="9:30 am" />
+
+        <CheckBox
+            android:id="@+id/notify_end_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="11dp"
+            android:text="Notify Me"
+            android:textSize="10dp"
+            />
 
     </LinearLayout>
 

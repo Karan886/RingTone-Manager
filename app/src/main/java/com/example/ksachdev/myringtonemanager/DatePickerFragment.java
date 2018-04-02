@@ -31,24 +31,13 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-
-
+        Tools tools = new Tools();
         if(dateText != null){
             DateFormatSymbols dateSymbols = new DateFormatSymbols();
-            String month_text = dateSymbols.getMonths()[month];
-
-            String day_str = "";
-            if(dayOfMonth > 3 && dayOfMonth < 31){
-                day_str = dayOfMonth + "th";
-            }else if(dayOfMonth == 31 || dayOfMonth == 1){
-                day_str = dayOfMonth + "st";
-            }else if(dayOfMonth == 2){
-                day_str = dayOfMonth + "nd";
-            }else if(dayOfMonth == 3){
-                day_str = dayOfMonth + "rd";
-            }
-
-            dateText.setText(month_text + ' ' + day_str + ", " + year);
+            String month_text = dateSymbols.getMonths()[month].substring(0,3);
+            dateText.setText(month_text + ' ' + tools.getDatePrefix(dayOfMonth) + " , " + year);
         }
     }
+
+
 }

@@ -36,7 +36,7 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
         Tools tools = new Tools();
         if(timeText != null){
             Log.i("hourofday",hourOfDay+"");
-           timeText.setText(tools.getFormattedTime(hourOfDay,minute));
+           timeText.setText(hourOfDay + ":" + minute);
         }
     }
 }

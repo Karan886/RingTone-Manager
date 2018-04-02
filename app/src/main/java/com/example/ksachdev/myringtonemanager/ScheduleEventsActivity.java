@@ -25,6 +25,7 @@ public class ScheduleEventsActivity extends AppCompatActivity {
     DatabaseHelper db;
     private static final String FIELD_IS_EMPTY_MESSAGE = "This Field cannot be Left Empty";
     private static final String DATE_IS_INVALID_MESSAGE = "The current Date chosen is invalid";
+    private static  final String TIME_IS_INVALID_MESSAGE = "The Current Time chosen is invalid";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +112,8 @@ public class ScheduleEventsActivity extends AppCompatActivity {
 
         TextView startDate = (TextView) findViewById(R.id.startDate_text);
         TextView endDate = (TextView) findViewById(R.id.EndDate_text);
+        Button startTime = (Button) findViewById(R.id.StartTime_Button);
+        Button endTime = (Button) findViewById(R.id.EndTime_Button);
 
         if(tools.isDatePassed(startDate.getText().toString())){
             startDate.setError(DATE_IS_INVALID_MESSAGE);
@@ -118,6 +121,19 @@ public class ScheduleEventsActivity extends AppCompatActivity {
         }
         if(tools.isDateBefore(endDate.getText().toString(),startDate.getText().toString())){
             endDate.setError(DATE_IS_INVALID_MESSAGE);
+            return false;
+        }
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+
+        String currentTime = calendar.get(calendar.HOUR_OF_DAY) + ":" + calendar.get(calendar.MINUTE);
+        if(tools.isTimePassed(startTime.getText().toString(),currentTime)){
+            startTime.setError(TIME_IS_INVALID_MESSAGE);
+            return false;
+        }
+
+        if(tools.isTimePassed(endTime.getText().toString(),startTime.getText().toString())){
+            endTime.setError(TIME_IS_INVALID_MESSAGE);
             return false;
         }
         return true;
@@ -157,6 +173,6 @@ public class ScheduleEventsActivity extends AppCompatActivity {
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date());
 
-        return tools.getFormattedTime(cal.get(cal.HOUR_OF_DAY),cal.get(cal.MINUTE));
+        return cal.get(cal.HOUR_OF_DAY) + ":" + cal.get(cal.MINUTE);
     }
 }

@@ -29,32 +29,16 @@ public class Tools {
         return day_str;
     }
 
-    public String getFormattedTime(int hourOfDay, int minutes){
-        String result = "";
-        String prefix = "";
-        String minute = "";
+    public boolean isTimePassed(String mTime, String cTime){
+        Calendar cal = Calendar.getInstance();
 
-        String hour = "";
-        if(hourOfDay > 12){
-            hour = (hourOfDay - 12) + "";
-            prefix = "PM";
-        }else if(hourOfDay == 12){
-            hour = hourOfDay + "";
-            prefix = "PM";
+        Date mDate = new SimpleDateFormat("HH:mm").parse(mTime,new ParsePosition(0));
+        Date cDate = new SimpleDateFormat("HH:mm").parse(cTime,new ParsePosition(0));
 
-        }else if(hourOfDay < 12){
-            hour = hourOfDay + "";
-            prefix = "AM";
+        if(mDate.before(cDate)){
+            return true;
         }
-
-        if(minutes < 10){
-            minute = "0" + minutes;
-        }else{
-            minute = minutes + "";
-        }
-
-        result = hour + ":" + minute + " " + prefix;
-        return result;
+        return false;
     }
 
     public boolean isDatePassed(String date){

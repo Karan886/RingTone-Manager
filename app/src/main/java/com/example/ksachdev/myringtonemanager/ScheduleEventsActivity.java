@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,6 +23,8 @@ public class ScheduleEventsActivity extends AppCompatActivity {
 
     Tools tools = new Tools();
     DatabaseHelper db;
+    private static final String FIELD_IS_EMPTY_MESSAGE = "This Field cannot be Left Empty";
+    private static final String DATE_IS_INVALID_MESSAGE = "The current Date chosen is invalid";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,11 +99,25 @@ public class ScheduleEventsActivity extends AppCompatActivity {
 
     public boolean validateForm(){
         EditText title = (EditText) findViewById(R.id.EventTitle);
-        if(title.getText().toString() == ""){
+        if(TextUtils.isEmpty(title.getText().toString())){
+            title.setError(FIELD_IS_EMPTY_MESSAGE);
             return false;
         }
         EditText desc = (EditText) findViewById(R.id.description_field);
-        if(desc.getText().toString() == ""){
+        if(TextUtils.isEmpty(desc.getText().toString())){
+            desc.setError(FIELD_IS_EMPTY_MESSAGE);
+            return false;
+        }
+
+        TextView startDate = (TextView) findViewById(R.id.startDate_text);
+        TextView endDate = (TextView) findViewById(R.id.EndDate_text);
+
+        if(tools.isDatePassed(startDate.getText().toString()) == false){
+            startDate.setError(DATE_IS_INVALID_MESSAGE);
+            return false;
+        }
+        if(tools.isDateBefore(startDate.getText().toString(),endDate.getText().toString()) == false){
+            endDate.setError(DATE_IS_INVALID_MESSAGE);
             return false;
         }
         return true;
@@ -130,9 +147,9 @@ public class ScheduleEventsActivity extends AppCompatActivity {
         cal.setTime(new Date());
 
         DateFormatSymbols dateSymbols = new DateFormatSymbols();
-        String month = dateSymbols.getMonths()[cal.get(cal.MONTH)];
+        String month = dateSymbols.getMonths()[cal.get(cal.MONTH)].substring(0,3);
 
-        result = month + " " + tools.getDatePrefix(cal.get(cal.DATE)) + ", " + cal.get(cal.YEAR);
+        result = month + " " + tools.getDatePrefix(cal.get(cal.DATE)) + " , " + cal.get(cal.YEAR);
         return result;
     }
 

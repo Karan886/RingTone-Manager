@@ -52,8 +52,6 @@ public class EventsListAdapter extends ArrayAdapter<Event> {
         ImageView imgView = (ImageView) convertView.findViewById(R.id.list_img);
         Tools tools = new Tools();
 
-        Log.i("ListFragment",event.getStartDate());
-
         if(tools.isDatePassed(event.getStartDate())){
             imgView.setImageResource(R.drawable.circe_list_item);
         }

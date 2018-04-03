@@ -56,7 +56,7 @@ public class EventsListAdapter extends ArrayAdapter<Event> {
         Date mDate = tools.getDate(event.getEndDate(),event.getEndTime());
         Date cDate = new Date();
 
-        if(mDate.before(cDate)){
+        if(cDate.before(mDate)){
             imgView.setImageResource(R.drawable.circe_list_item);
         }
 

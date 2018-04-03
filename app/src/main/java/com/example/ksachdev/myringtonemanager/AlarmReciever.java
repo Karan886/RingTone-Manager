@@ -21,13 +21,17 @@ public class AlarmReciever extends BroadcastReceiver {
         AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         String mode = intent.getStringExtra("mode");
 
+        String msg = "";
+
         if(mode.equals("end")){
-            am.setRingerMode(1);
+            msg = "Ending Silent Event";
+            am.setRingerMode(2);
         }else if(mode.equals("start")){
+            msg = "Starting Silent Event";
             am.setRingerMode(0);
         }
 
-        Toast.makeText(context,"Event Triggered" + am.getRingerMode(),Toast.LENGTH_LONG).show();
+        Toast.makeText(context,msg,Toast.LENGTH_LONG).show();
 
     }
 

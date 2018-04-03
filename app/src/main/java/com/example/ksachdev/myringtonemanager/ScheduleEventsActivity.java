@@ -136,6 +136,7 @@ public class ScheduleEventsActivity extends AppCompatActivity {
             endTime.setError(TIME_IS_INVALID_MESSAGE);
             return false;
         }
+
         return true;
     }
 

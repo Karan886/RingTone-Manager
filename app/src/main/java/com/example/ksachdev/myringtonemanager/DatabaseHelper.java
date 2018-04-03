@@ -1,15 +1,18 @@
 package com.example.ksachdev.myringtonemanager;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.media.AudioManager;
 import android.util.Log;
+import android.widget.Toast;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * Created by ksachdev on 2018-03-31.
@@ -19,7 +22,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String TAG = "DatabaseHelper";
 
-    private static final int DATABASE_VERSION = 7;
+    private static final int DATABASE_VERSION = 9;
     private static final String DATABASE_NAME = "EventsDB";
     private static final String TABLE_NAME = "MyEvents";
 
@@ -35,6 +38,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static DatabaseHelper dbInstance;
 
+    Context mContext;
+
 
 
     @Override
@@ -48,8 +53,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     KEY_START_TIME + " TEXT, " +
                     KEY_END_DATE + " TEXT, " +
                     KEY_ENDTIME + " TEXT, " +
-                    KEY_STARTID + " TEXT, " +
-                    KEY_ENDID + " TEXT" +
+                    KEY_STARTID + " INTEGER, " +
+                    KEY_ENDID + " INTEGER" +
                 ")";
 
         db.execSQL(createEventsTable);
@@ -74,6 +79,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private DatabaseHelper(Context context){
         super(context,DATABASE_NAME,null,DATABASE_VERSION);
+        this.mContext = context;
     }
 
     //database operations
@@ -81,8 +87,31 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void addEvents(Event event){
         SQLiteDatabase db = getWritableDatabase();
         try{
-            db.insert(TABLE_NAME,null,getValuesToInsert(event));
+            ContentValues values = getValuesToInsert(event);
+            db.insert(TABLE_NAME,null,values);
             Log.i(TAG,"successfully inserted a record");
+
+            Intent mIntent = new Intent(mContext,AlarmReciever.class);
+            mIntent.putExtra("mode","start");
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext,values.getAsInteger(KEY_STARTID),mIntent,0);
+
+            Calendar calendar = Calendar.getInstance();
+            Tools tools = new Tools();
+
+            calendar.setTime(tools.getDate(values.getAsString(KEY_STARTDATE),values.getAsString(KEY_START_TIME)));
+            AlarmManager am = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
+
+            am.setExact(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
+
+            mIntent = new Intent(mContext,AlarmReciever.class);
+            mIntent.putExtra("mode","end");
+            pendingIntent = PendingIntent.getBroadcast(mContext,values.getAsInteger(KEY_ENDID),mIntent,0);
+
+            calendar.setTime(tools.getDate(values.getAsString(KEY_END_DATE),values.getAsString(KEY_ENDTIME)));
+            am.setExact(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
+            Toast.makeText(mContext,"Scheduled Silent Event",Toast.LENGTH_LONG).show();
+
+
         }catch(Error e){
             Log.i(TAG,"Failed to insert record message: " +e.getMessage());
         }
@@ -92,7 +121,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void deleteEvent(int id){
         SQLiteDatabase db = getWritableDatabase();
         try{
-            db.delete(TABLE_NAME,KEY_ID + "= ?", new String[] {String.valueOf(id)});
+            db.delete(TABLE_NAME, KEY_ID + "=?", new String[] {String.valueOf(id)});
             Log.i(TAG,"successfully deleted record id = " + id);
         }catch(Error e){
             Log.i(TAG,"Failed to Delete a record message: " + e.getMessage());
@@ -110,9 +139,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             do{
                 Event event = new Event(cursor.getString(1),cursor.getString(2),cursor.getString(3),
                         cursor.getString(4),cursor.getString(5),cursor.getString(6));
-                String[] alarmId = {cursor.getString(7),cursor.getString(8)};
+                int[] alarmId = {cursor.getInt(7),cursor.getInt(8)};
                 event.setAlarmID(alarmId);
                 events.add(event);
+                Log.i(TAG,cursor.getInt(0)+"");
             }while(cursor.moveToNext());
 
         }
@@ -130,8 +160,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_ENDTIME,event.getEndTime());
 
 
-        values.put(KEY_STARTID,getCount() + ".0");
-        values.put(KEY_ENDID,getCount() + ".1");
+        values.put(KEY_STARTID,getCount());
+        values.put(KEY_ENDID,0 - getCount());
 
         return values;
 

@@ -1,5 +1,7 @@
 package com.example.ksachdev.myringtonemanager;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
@@ -9,9 +11,12 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -41,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         renderList();
+        ListView lview = (ListView) findViewById(R.id.events_listview);
+        registerForContextMenu(lview);
     }
 
     @Override
@@ -65,6 +72,37 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.row_options, menu);
+
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        int position = info.position;
+        Log.i("main",position+"");
+        View view = info.targetView;
+        switch (item.getItemId()) {
+            case R.id.cacel_row_event:
+                Event event = adapter.getItem(position);
+                adapter.remove(event);
+                AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
+                Intent mIntent = new Intent(getApplicationContext(), AlarmReciever.class);
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),event.getAlarmID()[0],mIntent,0);
+                am.cancel(pendingIntent);
+                //db.deleteEvent(position);
+                break;
+            default:
+                return super.onContextItemSelected(item);
+
+        }
+        return super.onContextItemSelected(item);
+    }
+
     public void showScheduleEventsActivity(){
         Intent intent = new Intent(this,ScheduleEventsActivity.class);
         startActivity(intent);
@@ -81,10 +119,8 @@ public class MainActivity extends AppCompatActivity {
             }
             adapter = new EventsListAdapter(this,events);
             listView = (ListView) findViewById(R.id.events_listview);
-
             listView.setAdapter(adapter);
         }else{
-
             emptyList_txt.setVisibility(View.VISIBLE);
         }
 

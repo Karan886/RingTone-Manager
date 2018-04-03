@@ -35,10 +35,16 @@ public class Tools {
         Date mDate = new SimpleDateFormat("HH:mm").parse(mTime,new ParsePosition(0));
         Date cDate = new SimpleDateFormat("HH:mm").parse(cTime,new ParsePosition(0));
 
-        if(mDate.before(cDate)){
+        if(mDate.before(cDate) || mDate.equals(cDate)){
             return true;
         }
         return false;
+    }
+
+    public Date getDate(String date, String time){
+        String mDate = date + " " + time;
+        Date cDate = new SimpleDateFormat("MMM dd , yyyy HH:mm").parse(mDate,new ParsePosition(0));
+        return cDate;
     }
 
     public boolean isDatePassed(String date){

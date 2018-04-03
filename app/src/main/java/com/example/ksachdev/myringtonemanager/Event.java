@@ -11,7 +11,7 @@ public class Event {
     private String startTime;
     private String endDate;
     private String endTime;
-    private String[] alarmID;
+    private int[] alarmID;
 
 
 
@@ -72,11 +72,11 @@ public class Event {
         this.endTime = endTime;
     }
 
-    public String[] getAlarmID() {
+    public int[] getAlarmID() {
         return alarmID;
     }
 
-    public void setAlarmID(String[] alarmID) {
+    public void setAlarmID(int[] alarmID) {
         this.alarmID = alarmID;
     }
 

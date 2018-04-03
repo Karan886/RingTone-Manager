@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -52,7 +53,10 @@ public class EventsListAdapter extends ArrayAdapter<Event> {
         ImageView imgView = (ImageView) convertView.findViewById(R.id.list_img);
         Tools tools = new Tools();
 
-        if(tools.isDatePassed(event.getStartDate()) == false){
+        Date mDate = tools.getDate(event.getEndDate(),event.getEndTime());
+        Date cDate = new Date();
+
+        if(mDate.before(cDate)){
             imgView.setImageResource(R.drawable.circe_list_item);
         }
 

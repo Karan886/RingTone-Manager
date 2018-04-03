@@ -12,6 +12,7 @@ public class Event {
     private String endDate;
     private String endTime;
     private int[] alarmID;
+    private int key;
 
 
 
@@ -79,5 +80,14 @@ public class Event {
     public void setAlarmID(int[] alarmID) {
         this.alarmID = alarmID;
     }
+
+    public int getKey() {
+        return key;
+    }
+
+    public void setKey(int key) {
+        this.key = key;
+    }
+
 
 }

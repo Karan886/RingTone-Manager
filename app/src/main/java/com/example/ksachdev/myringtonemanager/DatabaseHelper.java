@@ -22,7 +22,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String TAG = "DatabaseHelper";
 
-    private static final int DATABASE_VERSION = 9;
+    private static final int DATABASE_VERSION = 12;
     private static final String DATABASE_NAME = "EventsDB";
     private static final String TABLE_NAME = "MyEvents";
 
@@ -46,7 +46,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String createEventsTable = "CREATE TABLE " + TABLE_NAME +
                 "(" +
-                    KEY_ID + "INTEGER PRIMARY KEY, " +
+                    KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                     KEY_TITLE + " TEXT, " +
                     KEY_DESC + " TEXT, " +
                     KEY_STARTDATE + " TEXT, " +
@@ -91,6 +91,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.insert(TABLE_NAME,null,values);
             Log.i(TAG,"successfully inserted a record");
 
+            AlarmManager am = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
+
             Intent mIntent = new Intent(mContext,AlarmReciever.class);
             mIntent.putExtra("mode","start");
             PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext,values.getAsInteger(KEY_STARTID),mIntent,0);
@@ -99,16 +101,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Tools tools = new Tools();
 
             calendar.setTime(tools.getDate(values.getAsString(KEY_STARTDATE),values.getAsString(KEY_START_TIME)));
-            AlarmManager am = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
 
             am.setExact(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
 
-            mIntent = new Intent(mContext,AlarmReciever.class);
-            mIntent.putExtra("mode","end");
-            pendingIntent = PendingIntent.getBroadcast(mContext,values.getAsInteger(KEY_ENDID),mIntent,0);
+            Intent mIntent2 = new Intent(mContext,AlarmReciever.class);
+            mIntent2.putExtra("mode","end");
+            PendingIntent pendingIntent2 = PendingIntent.getBroadcast(mContext,values.getAsInteger(KEY_ENDID),mIntent2,0);
 
             calendar.setTime(tools.getDate(values.getAsString(KEY_END_DATE),values.getAsString(KEY_ENDTIME)));
-            am.setExact(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
+            am.setExact(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent2);
+
             Toast.makeText(mContext,"Scheduled Silent Event",Toast.LENGTH_LONG).show();
 
 
@@ -141,8 +143,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         cursor.getString(4),cursor.getString(5),cursor.getString(6));
                 int[] alarmId = {cursor.getInt(7),cursor.getInt(8)};
                 event.setAlarmID(alarmId);
+                event.setKey(cursor.getInt(0));
                 events.add(event);
-                Log.i(TAG,cursor.getInt(0)+"");
             }while(cursor.moveToNext());
 
         }

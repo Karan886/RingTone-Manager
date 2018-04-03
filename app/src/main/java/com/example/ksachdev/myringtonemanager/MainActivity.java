@@ -89,12 +89,18 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.cacel_row_event:
                 Event event = adapter.getItem(position);
-                adapter.remove(event);
                 AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
+
                 Intent mIntent = new Intent(getApplicationContext(), AlarmReciever.class);
                 PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(),event.getAlarmID()[0],mIntent,0);
                 am.cancel(pendingIntent);
-                //db.deleteEvent(position);
+
+                Intent mIntent2 = new Intent(getApplicationContext(),AlarmReciever.class);
+                PendingIntent pendingIntent2 = PendingIntent.getBroadcast(getApplicationContext(),event.getAlarmID()[1],mIntent2,0);
+                am.cancel(pendingIntent2);
+
+                db.deleteEvent(event.getKey());
+                adapter.remove(event);
                 break;
             default:
                 return super.onContextItemSelected(item);

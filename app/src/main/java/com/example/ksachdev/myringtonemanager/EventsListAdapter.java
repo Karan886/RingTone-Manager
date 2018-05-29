@@ -51,13 +51,12 @@ public class EventsListAdapter extends ArrayAdapter<Event> {
         row_time.setText(event.getStartTime() + " - " + event.getEndTime());
 
         ImageView imgView = (ImageView) convertView.findViewById(R.id.list_img);
-        Tools tools = new Tools();
 
-        Date mDate = tools.getDate(event.getEndDate(),event.getEndTime());
-        Date cDate = new Date();
-
-        if(cDate.before(mDate)){
+        if(event.getImgResource() == 0){
+            Log.i(TAG,"green image resource activated");
             imgView.setImageResource(R.drawable.circe_list_item);
+        }else if(event.getImgResource() == 1){
+            imgView.setImageResource(R.drawable.circle_list_item_grey);
         }
 
         return convertView;

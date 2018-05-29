@@ -21,14 +21,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.logging.Logger;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
     DatabaseHelper db;
     EventsListAdapter adapter;
     ListView listView;
-
+    private String[] collisonSet;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -84,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         int position = info.position;
-        Log.i("main",position+"");
         View view = info.targetView;
         switch (item.getItemId()) {
             case R.id.cacel_row_event:
@@ -110,7 +110,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void showScheduleEventsActivity(){
+
         Intent intent = new Intent(this,ScheduleEventsActivity.class);
+        intent.putExtra("set",collisonSet);
         startActivity(intent);
     }
 
@@ -118,7 +120,12 @@ public class MainActivity extends AppCompatActivity {
         TextView emptyList_txt = (TextView) findViewById(R.id.temp_txt);
         db = DatabaseHelper.getInstance(this);
         ArrayList<Event> events = db.getAllEvents();
+        collisonSet = new String[events.size()];
         if(events.size() > 0){
+            for(int i=0;i<events.size();i++){
+                collisonSet[collisonSet.length-1] = events.get(i).getEndTime();
+                collisonSet[collisonSet.length-1] = events.get(i).getEndDate();
+            }
             emptyList_txt.setVisibility(View.INVISIBLE);
             if(adapter != null){
                 adapter.clear();

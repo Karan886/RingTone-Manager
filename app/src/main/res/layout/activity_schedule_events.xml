@@ -64,14 +64,6 @@
             android:layout_marginLeft="18dp"
             android:text="8:30 am" />
 
-        <CheckBox
-            android:id="@+id/notify_start_checkbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="11dp"
-            android:text="Notify Me"
-            android:textSize="10dp" />
-
     </LinearLayout>
 
     <TextView
@@ -109,14 +101,7 @@
             android:layout_marginLeft="18dp"
             android:text="9:30 am" />
 
-        <CheckBox
-            android:id="@+id/notify_end_checkbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="11dp"
-            android:text="Notify Me"
-            android:textSize="10dp"
-            />
+
 
     </LinearLayout>
 

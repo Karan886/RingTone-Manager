@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import android.widget.Toast;
 
 /**
@@ -15,16 +16,20 @@ import android.widget.Toast;
  */
 
 public class AlarmReciever extends BroadcastReceiver {
+    private static String TAG = "AlarmReceiver";
 
     @Override
     public void onReceive(Context context, Intent intent) {
         AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         String mode = intent.getStringExtra("mode");
+        DatabaseHelper db = DatabaseHelper.getInstance(context);
 
         String msg = "";
 
         if(mode.equals("end")){
             msg = "Ending Silent Event";
+            String key = intent.getStringExtra("key");
+            db.updateEvent(key);
             am.setRingerMode(2);
         }else if(mode.equals("start")){
             msg = "Starting Silent Event";
@@ -33,20 +38,8 @@ public class AlarmReciever extends BroadcastReceiver {
 
         Toast.makeText(context,msg,Toast.LENGTH_LONG).show();
 
+
+
+
     }
-
-    /*public void buildNotification(Context context,String title, int requestId, String msg_small){
-
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context);
-        mBuilder.setAutoCancel(true);
-        mBuilder.setSmallIcon(R.mipmap.ic_launcher).setContentTitle(title).setContentText(msg_small);
-
-        Intent intent = new Intent(context,MainActivity.class);
-
-        PendingIntent pendingIntent = PendingIntent.getActivity(context,requestId,intent,PendingIntent.FLAG_UPDATE_CURRENT);
-        mBuilder.setContentIntent(pendingIntent);
-
-        NotificationManager mNotificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationManager.notify(requestId,mBuilder.build());
-    }*/
 }

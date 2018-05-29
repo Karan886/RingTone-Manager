@@ -13,6 +13,8 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * Created by ksachdev on 2018-03-31.
@@ -22,7 +24,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String TAG = "DatabaseHelper";
 
-    private static final int DATABASE_VERSION = 12;
+    private static final int DATABASE_VERSION = 20;
     private static final String DATABASE_NAME = "EventsDB";
     private static final String TABLE_NAME = "MyEvents";
 
@@ -35,10 +37,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_ENDTIME = "endtime";
     private static final String KEY_STARTID = "startID";
     private static final String KEY_ENDID = "endID";
+    private static final String KEY_IMGRESOURCE = "imgResource";
 
     private static DatabaseHelper dbInstance;
 
     Context mContext;
+
 
 
 
@@ -54,11 +58,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     KEY_END_DATE + " TEXT, " +
                     KEY_ENDTIME + " TEXT, " +
                     KEY_STARTID + " INTEGER, " +
-                    KEY_ENDID + " INTEGER" +
+                    KEY_ENDID + " INTEGER, " +
+                    KEY_IMGRESOURCE + " INTEGER" +
                 ")";
 
         db.execSQL(createEventsTable);
         Log.i(TAG,"created db table");
+        Cursor c = db.rawQuery("SELECT * FROM " + TABLE_NAME,null);
+        Log.i(TAG,c.getColumnNames()[9]+"");
     }
 
     @Override
@@ -66,6 +73,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if(oldVersion != newVersion){
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
             onCreate(db);
+            Log.i(TAG,"db upgraded");
         }
     }
 
@@ -91,8 +99,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.insert(TABLE_NAME,null,values);
             Log.i(TAG,"successfully inserted a record");
 
+            //schedule alarm for silent event
             AlarmManager am = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
 
+            //set alarm to begin silent event
             Intent mIntent = new Intent(mContext,AlarmReciever.class);
             mIntent.putExtra("mode","start");
             PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext,values.getAsInteger(KEY_STARTID),mIntent,0);
@@ -104,8 +114,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             am.setExact(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent);
 
+            //set alarm to end silent event
             Intent mIntent2 = new Intent(mContext,AlarmReciever.class);
             mIntent2.putExtra("mode","end");
+            mIntent2.putExtra("key",event.getEndTime());
             PendingIntent pendingIntent2 = PendingIntent.getBroadcast(mContext,values.getAsInteger(KEY_ENDID),mIntent2,0);
 
             calendar.setTime(tools.getDate(values.getAsString(KEY_END_DATE),values.getAsString(KEY_ENDTIME)));
@@ -140,10 +152,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if(cursor.moveToFirst()){
             do{
                 Event event = new Event(cursor.getString(1),cursor.getString(2),cursor.getString(3),
-                        cursor.getString(4),cursor.getString(5),cursor.getString(6));
+                        cursor.getString(4),cursor.getString(5),cursor.getString(6),cursor.getInt(9));
                 int[] alarmId = {cursor.getInt(7),cursor.getInt(8)};
                 event.setAlarmID(alarmId);
                 event.setKey(cursor.getInt(0));
+                Log.i(TAG,event.getImgResource()+"");
                 events.add(event);
             }while(cursor.moveToNext());
 
@@ -161,11 +174,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(KEY_END_DATE,event.getEndDate());
         values.put(KEY_ENDTIME,event.getEndTime());
 
-
+        values.put(KEY_IMGRESOURCE,event.getImgResource());
         values.put(KEY_STARTID,getCount());
         values.put(KEY_ENDID,0 - getCount());
 
         return values;
+
+    }
+    //search for event on the database using endTime since it is unique
+    public void updateEvent(String endTime){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_IMGRESOURCE,1);
+
+        db.update(TABLE_NAME,values,KEY_ENDTIME + "=?",new String[]{endTime});
 
     }
 

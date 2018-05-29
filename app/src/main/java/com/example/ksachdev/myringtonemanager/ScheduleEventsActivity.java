@@ -5,6 +5,7 @@ import android.app.DialogFragment;
 import java.text.DateFormatSymbols;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
 
 import android.content.Intent;
 import android.provider.Settings;
@@ -26,11 +27,21 @@ public class ScheduleEventsActivity extends AppCompatActivity {
     private static final String FIELD_IS_EMPTY_MESSAGE = "This Field cannot be Left Empty";
     private static final String DATE_IS_INVALID_MESSAGE = "The current Date chosen is invalid";
     private static  final String TIME_IS_INVALID_MESSAGE = "The Current Time chosen is invalid";
+    private HashSet collisionSet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedule_events);
+
+        String[] mCollisionData = getIntent().getStringArrayExtra("set");
+        collisionSet = new HashSet();
+        //keep track of scheduled events, to detect collisions
+        if(mCollisionData != null){
+            for(int i=0;i<mCollisionData.length;i++){
+                collisionSet.add(mCollisionData[i]);
+            }
+        }
 
         final TextView startDateText = (TextView) findViewById(R.id.startDate_text);
         startDateText.setText(getFormattedDate());
@@ -82,7 +93,7 @@ public class ScheduleEventsActivity extends AppCompatActivity {
                 if(validateForm() == true){
                     Event mEvent = new Event(title.getText().toString(),desc.getText().toString(),
                             startDateText.getText().toString(),startTimeText.getText().toString(),
-                            endDateText.getText().toString(),endTimeText.getText().toString());
+                            endDateText.getText().toString(),endTimeText.getText().toString(),0);
                     db = DatabaseHelper.getInstance(getApplicationContext());
                     db.addEvents(mEvent);
                     gotoMain();
@@ -136,7 +147,12 @@ public class ScheduleEventsActivity extends AppCompatActivity {
             endTime.setError(TIME_IS_INVALID_MESSAGE);
             return false;
         }
-
+        //detecting collisions with previously scheduled events
+        if(collisionSet != null){
+            if(collisionSet.contains(endTime.toString()) && collisionSet.contains(startTime.toString())){
+                endTime.setError("Collsion Detected, Please Review your Schedule");
+            }
+        }
         return true;
     }
 

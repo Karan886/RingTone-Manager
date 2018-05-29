@@ -1,10 +1,14 @@
 package com.example.ksachdev.myringtonemanager;
 
+import android.util.Log;
+
 /**
  * Created by ksachdev on 2018-03-31.
  */
 
 public class Event {
+    private static String TAG = "event class";
+
     private String title;
     private String desc;
     private String startDate;
@@ -13,6 +17,7 @@ public class Event {
     private String endTime;
     private int[] alarmID;
     private int key;
+    private int imgResource = 0;
 
 
 
@@ -23,6 +28,16 @@ public class Event {
         this.startTime = startTime;
         this.endDate = endDate;
         this.endTime = endTime;
+    }
+
+    public Event(String title, String desc, String startDate, String startTime, String endDate, String endTime, int imgResource) {
+        this.title = title;
+        this.desc = desc;
+        this.startDate = startDate;
+        this.startTime = startTime;
+        this.endDate = endDate;
+        this.endTime = endTime;
+        this.imgResource = imgResource;
     }
 
     public String getTitle() {
@@ -87,6 +102,13 @@ public class Event {
 
     public void setKey(int key) {
         this.key = key;
+    }
+
+    public void setImgResource(int resourceID){
+        this.imgResource = resourceID;
+    }
+    public int getImgResource(){
+        return this.imgResource;
     }
 
 

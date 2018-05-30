@@ -24,7 +24,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String TAG = "DatabaseHelper";
 
-    private static final int DATABASE_VERSION = 21;
+    private static final int DATABASE_VERSION = 20;
     private static final String DATABASE_NAME = "EventsDB";
     private static final String TABLE_NAME = "MyEvents";
 
@@ -38,7 +38,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_STARTID = "startID";
     private static final String KEY_ENDID = "endID";
     private static final String KEY_IMGRESOURCE = "imgResource";
-    private static final String KEY_TRANSMODE = "transitionMode";
+
 
     private static DatabaseHelper dbInstance;
 
@@ -60,8 +60,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     KEY_ENDTIME + " TEXT, " +
                     KEY_STARTID + " INTEGER, " +
                     KEY_ENDID + " INTEGER, " +
-                    KEY_IMGRESOURCE + " INTEGER," +
-                    KEY_TRANSMODE + " TEXT" +
+                    KEY_IMGRESOURCE + " INTEGER" +
+
                 ")";
 
         db.execSQL(createEventsTable);

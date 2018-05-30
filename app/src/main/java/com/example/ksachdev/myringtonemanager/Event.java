@@ -18,7 +18,7 @@ public class Event {
     private int[] alarmID;
     private int key;
     private int imgResource = 0;
-    private String transitionMode;
+
 
 
 
@@ -112,13 +112,6 @@ public class Event {
         return this.imgResource;
     }
 
-    public void setTransitionMode(String mode){
-        this.transitionMode = mode;
-    }
-
-    public String getTransitionMode(){
-        return this.transitionMode;
-    }
 
 
 }

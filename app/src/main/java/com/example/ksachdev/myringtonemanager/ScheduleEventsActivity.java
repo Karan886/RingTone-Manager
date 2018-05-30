@@ -12,6 +12,7 @@ import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,21 +28,14 @@ public class ScheduleEventsActivity extends AppCompatActivity {
     private static final String FIELD_IS_EMPTY_MESSAGE = "This Field cannot be Left Empty";
     private static final String DATE_IS_INVALID_MESSAGE = "The current Date chosen is invalid";
     private static  final String TIME_IS_INVALID_MESSAGE = "The Current Time chosen is invalid";
-    private HashSet collisionSet;
+    private static final String TAG = "EventScheduleActivity";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedule_events);
 
-        String[] mCollisionData = getIntent().getStringArrayExtra("set");
-        collisionSet = new HashSet();
-        //keep track of scheduled events, to detect collisions
-        if(mCollisionData != null){
-            for(int i=0;i<mCollisionData.length;i++){
-                collisionSet.add(mCollisionData[i]);
-            }
-        }
 
         final TextView startDateText = (TextView) findViewById(R.id.startDate_text);
         startDateText.setText(getFormattedDate());
@@ -147,12 +141,7 @@ public class ScheduleEventsActivity extends AppCompatActivity {
             endTime.setError(TIME_IS_INVALID_MESSAGE);
             return false;
         }
-        //detecting collisions with previously scheduled events
-        if(collisionSet != null){
-            if(collisionSet.contains(endTime.toString()) && collisionSet.contains(startTime.toString())){
-                endTime.setError("Collsion Detected, Please Review your Schedule");
-            }
-        }
+
         return true;
     }
 

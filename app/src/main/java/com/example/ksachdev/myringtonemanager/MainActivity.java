@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity{
     DatabaseHelper db;
     EventsListAdapter adapter;
     ListView listView;
-    private String[] collisonSet;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -112,7 +112,6 @@ public class MainActivity extends AppCompatActivity{
     public void showScheduleEventsActivity(){
 
         Intent intent = new Intent(this,ScheduleEventsActivity.class);
-        intent.putExtra("set",collisonSet);
         startActivity(intent);
     }
 
@@ -120,12 +119,8 @@ public class MainActivity extends AppCompatActivity{
         TextView emptyList_txt = (TextView) findViewById(R.id.temp_txt);
         db = DatabaseHelper.getInstance(this);
         ArrayList<Event> events = db.getAllEvents();
-        collisonSet = new String[events.size()];
+
         if(events.size() > 0){
-            for(int i=0;i<events.size();i++){
-                collisonSet[collisonSet.length-1] = events.get(i).getEndTime();
-                collisonSet[collisonSet.length-1] = events.get(i).getEndDate();
-            }
             emptyList_txt.setVisibility(View.INVISIBLE);
             if(adapter != null){
                 adapter.clear();

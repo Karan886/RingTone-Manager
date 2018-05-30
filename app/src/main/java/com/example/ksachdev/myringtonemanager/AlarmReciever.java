@@ -26,20 +26,21 @@ public class AlarmReciever extends BroadcastReceiver {
 
         String msg = "";
 
-        if(mode.equals("end")){
-            msg = "Ending Silent Event";
-            String key = intent.getStringExtra("key");
-            db.updateEvent(key);
-            am.setRingerMode(2);
-        }else if(mode.equals("start")){
-            msg = "Starting Silent Event";
-            am.setRingerMode(0);
-        }
+       if(mode != null){
+           if(mode.equals("end")){
+               msg = "Ending Silent Event";
+               String key = intent.getStringExtra("key");
+               db.updateEvent(key);
+               am.setRingerMode(2);
+           }else if(mode.equals("start")){
+               msg = "Starting Silent Event";
+               am.setRingerMode(0);
+           }
 
+       }
         Toast.makeText(context,msg,Toast.LENGTH_LONG).show();
 
 
-
-
     }
+    
 }

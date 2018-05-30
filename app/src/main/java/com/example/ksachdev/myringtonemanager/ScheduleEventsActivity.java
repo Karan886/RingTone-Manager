@@ -14,9 +14,11 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
@@ -76,6 +78,19 @@ public class ScheduleEventsActivity extends AppCompatActivity {
                 showTimePicker(R.id.EndTime_Button);
             }
         });
+
+        final Spinner startSpinner = (Spinner) findViewById(R.id.spinner_start);
+        ArrayAdapter<CharSequence> startSpinnerAdapter = ArrayAdapter.createFromResource(this,R.array.ringtoneModes_start,
+                android.R.layout.simple_spinner_dropdown_item);
+        startSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        startSpinner.setAdapter(startSpinnerAdapter);
+
+        final Spinner endSpinner = (Spinner) findViewById(R.id.spinner_end);
+        ArrayAdapter<CharSequence> endSpinnerAdapter = ArrayAdapter.createFromResource(this,R.array.ringtoneModes_end,
+                android.R.layout.simple_spinner_dropdown_item);
+        endSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        endSpinner.setAdapter(endSpinnerAdapter);
+
 
         Button saveButton = (Button) findViewById(R.id.save_button);
         saveButton.setOnClickListener(new View.OnClickListener() {

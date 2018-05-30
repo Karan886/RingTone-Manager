@@ -63,6 +63,11 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="18dp"
             android:text="8:30 am" />
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinner_start"
+            ></Spinner>
 
     </LinearLayout>
 
@@ -100,6 +105,12 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="18dp"
             android:text="9:30 am" />
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinner_end"
+            ></Spinner>
 
 
 

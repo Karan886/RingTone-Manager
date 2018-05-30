@@ -94,7 +94,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     //database operations
 
-    public void addEvents(Event event){
+    public void addEvents(Event event,String[] mode){
         SQLiteDatabase db = getWritableDatabase();
         try{
             ContentValues values = getValuesToInsert(event);
@@ -107,7 +107,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             //set alarm to begin silent event
             Intent mIntent = new Intent(mContext,AlarmReciever.class);
             mIntent.putExtra("mode","start");
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext,values.getAsInteger(KEY_STARTID),mIntent,0);
+            Log.i(TAG,mode[1] + "");
+            mIntent.putExtra("action",mode[0]);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext,values.getAsInteger(KEY_STARTID),mIntent,PendingIntent.FLAG_UPDATE_CURRENT);
 
             Calendar calendar = Calendar.getInstance();
             Tools tools = new Tools();
@@ -120,7 +122,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Intent mIntent2 = new Intent(mContext,AlarmReciever.class);
             mIntent2.putExtra("mode","end");
             mIntent2.putExtra("key",event.getEndTime());
-            PendingIntent pendingIntent2 = PendingIntent.getBroadcast(mContext,values.getAsInteger(KEY_ENDID),mIntent2,0);
+            mIntent.putExtra("action",mode[1]);
+            PendingIntent pendingIntent2 = PendingIntent.getBroadcast(mContext,values.getAsInteger(KEY_ENDID),mIntent2,PendingIntent.FLAG_UPDATE_CURRENT);
 
             calendar.setTime(tools.getDate(values.getAsString(KEY_END_DATE),values.getAsString(KEY_ENDTIME)));
             am.setExact(AlarmManager.RTC_WAKEUP,calendar.getTimeInMillis(),pendingIntent2);

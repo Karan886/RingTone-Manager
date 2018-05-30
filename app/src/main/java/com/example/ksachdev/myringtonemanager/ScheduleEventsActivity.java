@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,7 +24,7 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
-public class ScheduleEventsActivity extends AppCompatActivity {
+public class ScheduleEventsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     Tools tools = new Tools();
     DatabaseHelper db;
@@ -31,6 +32,11 @@ public class ScheduleEventsActivity extends AppCompatActivity {
     private static final String DATE_IS_INVALID_MESSAGE = "The current Date chosen is invalid";
     private static  final String TIME_IS_INVALID_MESSAGE = "The Current Time chosen is invalid";
     private static final String TAG = "EventScheduleActivity";
+
+    private String startSpinnerValue = "silent";
+    private String endSpinnerValue = "vibrate";
+    private Spinner startSpinner;
+    private Spinner endSpinner;
 
 
     @Override
@@ -79,13 +85,19 @@ public class ScheduleEventsActivity extends AppCompatActivity {
             }
         });
 
-        final Spinner startSpinner = (Spinner) findViewById(R.id.spinner_start);
+        startSpinner = (Spinner) findViewById(R.id.spinner_start);
+        startSpinner.setOnItemSelectedListener(this);
+
         ArrayAdapter<CharSequence> startSpinnerAdapter = ArrayAdapter.createFromResource(this,R.array.ringtoneModes_start,
                 android.R.layout.simple_spinner_dropdown_item);
         startSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         startSpinner.setAdapter(startSpinnerAdapter);
 
-        final Spinner endSpinner = (Spinner) findViewById(R.id.spinner_end);
+
+
+        endSpinner = (Spinner) findViewById(R.id.spinner_end);
+        endSpinner.setOnItemSelectedListener(this);
+
         ArrayAdapter<CharSequence> endSpinnerAdapter = ArrayAdapter.createFromResource(this,R.array.ringtoneModes_end,
                 android.R.layout.simple_spinner_dropdown_item);
         endSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -104,12 +116,25 @@ public class ScheduleEventsActivity extends AppCompatActivity {
                             startDateText.getText().toString(),startTimeText.getText().toString(),
                             endDateText.getText().toString(),endTimeText.getText().toString(),0);
                     db = DatabaseHelper.getInstance(getApplicationContext());
-                    db.addEvents(mEvent);
+
+                    db.addEvents(mEvent,new String[]{startSpinnerValue,endSpinnerValue});
                     gotoMain();
                 }
-
             }
         });
+    }
+
+    public void onItemSelected(AdapterView<?> parent, View view,int pos, long id){
+        if(view.getId() == R.id.spinner_start){
+            startSpinnerValue = parent.getItemAtPosition(pos).toString();
+        }else{
+            endSpinnerValue = parent.getItemAtPosition(pos).toString();
+        }
+    }
+
+    public void onNothingSelected(AdapterView<?> parent){
+        endSpinnerValue = "vibrate";
+        startSpinnerValue = "silent";
     }
 
     private void gotoMain(){

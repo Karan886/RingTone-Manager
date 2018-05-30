@@ -21,24 +21,36 @@ public class AlarmReciever extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+
         String mode = intent.getStringExtra("mode");
+        String action = intent.getStringExtra("action");
         DatabaseHelper db = DatabaseHelper.getInstance(context);
 
         String msg = "";
+        Log.i(TAG,mode + " , " + action);
 
-       if(mode != null){
+       if(mode != null && action != null){
            if(mode.equals("end")){
-               msg = "Ending Silent Event";
+               msg = "Ending "+action+" Event";
                String key = intent.getStringExtra("key");
                db.updateEvent(key);
-               am.setRingerMode(2);
+               if(action.equals("vibrate")){
+                   am.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+               }else{
+                   am.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+               }
            }else if(mode.equals("start")){
-               msg = "Starting Silent Event";
-               am.setRingerMode(0);
+               msg = "Starting "+action+" Event";
+               if(action.equals("silent")){
+                   am.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+               }else{
+                   am.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+               }
            }
 
        }
         Toast.makeText(context,msg,Toast.LENGTH_LONG).show();
+
 
     }
 

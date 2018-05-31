@@ -94,7 +94,6 @@ public class ScheduleEventsActivity extends AppCompatActivity implements Adapter
         startSpinner.setAdapter(startSpinnerAdapter);
 
 
-
         endSpinner = (Spinner) findViewById(R.id.spinner_end);
         endSpinner.setOnItemSelectedListener(this);
 

@@ -27,11 +27,11 @@ public class AlarmReciever extends BroadcastReceiver {
         DatabaseHelper db = DatabaseHelper.getInstance(context);
 
         String msg = "";
-        Log.i(TAG,mode + " , " + action);
+        String initAction = "silent";
 
        if(mode != null && action != null){
            if(mode.equals("end")){
-               msg = "Ending "+action+" Event";
+               msg = "Ending "+initAction+" Event";
                String key = intent.getStringExtra("key");
                db.updateEvent(key);
                if(action.equals("vibrate")){
@@ -41,6 +41,7 @@ public class AlarmReciever extends BroadcastReceiver {
                }
            }else if(mode.equals("start")){
                msg = "Starting "+action+" Event";
+               initAction = action;
                if(action.equals("silent")){
                    am.setRingerMode(AudioManager.RINGER_MODE_SILENT);
                }else{

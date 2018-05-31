@@ -122,7 +122,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             Intent mIntent2 = new Intent(mContext,AlarmReciever.class);
             mIntent2.putExtra("mode","end");
             mIntent2.putExtra("key",event.getEndTime());
-            mIntent.putExtra("action",mode[1]);
+            mIntent2.putExtra("action",mode[1]);
             PendingIntent pendingIntent2 = PendingIntent.getBroadcast(mContext,values.getAsInteger(KEY_ENDID),mIntent2,PendingIntent.FLAG_UPDATE_CURRENT);
 
             calendar.setTime(tools.getDate(values.getAsString(KEY_END_DATE),values.getAsString(KEY_ENDTIME)));

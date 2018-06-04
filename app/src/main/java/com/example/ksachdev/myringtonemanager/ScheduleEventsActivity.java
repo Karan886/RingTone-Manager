@@ -161,10 +161,12 @@ public class ScheduleEventsActivity extends AppCompatActivity implements Adapter
 
         if(tools.isDatePassed(startDate.getText().toString())){
             startDate.setError(DATE_IS_INVALID_MESSAGE);
+            Log.i(TAG,DATE_IS_INVALID_MESSAGE);
             return false;
         }
         if(tools.isDateBefore(endDate.getText().toString(),startDate.getText().toString())){
             endDate.setError(DATE_IS_INVALID_MESSAGE);
+            Log.i(TAG,DATE_IS_INVALID_MESSAGE);
             return false;
         }
         Calendar calendar = Calendar.getInstance();
@@ -173,11 +175,13 @@ public class ScheduleEventsActivity extends AppCompatActivity implements Adapter
         String currentTime = calendar.get(calendar.HOUR_OF_DAY) + ":" + calendar.get(calendar.MINUTE);
         if(tools.isTimePassed(startTime.getText().toString(),currentTime)){
             startTime.setError(TIME_IS_INVALID_MESSAGE);
+            Log.i(TAG,TIME_IS_INVALID_MESSAGE);
             return false;
         }
 
         if(tools.isTimePassed(endTime.getText().toString(),startTime.getText().toString())){
             endTime.setError(TIME_IS_INVALID_MESSAGE);
+            Log.i(TAG,TIME_IS_INVALID_MESSAGE);
             return false;
         }
 

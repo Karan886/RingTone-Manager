@@ -23,4 +23,7 @@ devices (as a ringtonemanager event) is a desired feature I want to add
 tools class (they have some helper methods to format date and time)
 
 
+Checkout screenshots in the demo folder!!
+
+
 

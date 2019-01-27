@@ -6,7 +6,7 @@ There are 2 scenarios that happen:
 This application solves this simple problem, RingToneManager allows you to schedule such events ahead of time, so that on
 the occasion that you forget to turn your device to silent or back from silent, you are totally covered.
 
-testing and compiling:
+Testing and Compiling:
 
 This app is built on Android Studio, you may download it here: https://developer.android.com/studio/
 

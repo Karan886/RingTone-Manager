@@ -2,6 +2,10 @@ Imagine you have an important event that requires mobile devices to be on silent
 There are 2 scenarios that happen:
   1. The mobile device is not on silent/vibrate etc...
   2. The mobile device is not swiched back from silent/vibrate and important calls/texts/etc... are missed 
+  
+RingToneManager prevents the above problems by allowing user to schedule events ahead of time.
+
+This application solves this simple problem, RingToneManager allows you to schedule such events ahead of time, so that on the occasion that you forget to turn your device to silent or back from silent, you are totally covered.
 
 Testing and Compiling:
 

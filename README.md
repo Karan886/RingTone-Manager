@@ -5,7 +5,7 @@ There are 2 scenarios that happen:
   
 RingToneManager prevents the above problems by allowing user to schedule events ahead of time.
 
-This application solves this simple problem, RingToneManager allows you to schedule such events ahead of time, so that on the occasion that you forget to turn your device to silent or back from silent, you are totally covered.
+This application solves this simple problem, RingToneManager allows you to schedule such events ahead of time, so that on the occasion that you forget to turn your device to silent or back from silent, you are covered.
 
 Testing and Compiling:
 
